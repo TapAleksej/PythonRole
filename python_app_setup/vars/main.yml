@@ -1,2 +1,4 @@
 ---
 # vars file for python_app_setup
+prj_dir: /opt/myapp
+venv_dir: /opt/myapp/.venv
