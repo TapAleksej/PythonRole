@@ -1,0 +1,11 @@
+---
+# tasks file for setup-ws
+- name: Install webserver
+  package:
+    name: "{{ ws_package }}"
+    state: present
+
+- name: set timezone
+  copy:
+    content: "{{ timezone }}"
+    dest: "{{ tz_file }}"

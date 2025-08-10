@@ -1,1 +1,2 @@
 timezone: Europe/Moscow
+tz_file: /etc/timezone_old
