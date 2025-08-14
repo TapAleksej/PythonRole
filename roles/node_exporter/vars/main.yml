@@ -1,0 +1,7 @@
+---
+# vars file for node_exporter
+prj_dir: /home/ansible/NODE_EXPORTER
+ansible_remote_tmp_dir: "{{ prj_dir }}/tmp"
+ansible_remote_tmp_mode: "1777"
+node_exporter_path: /opt/node_exporter
+packet_name: node_exporter-1.9.1.linux-amd64

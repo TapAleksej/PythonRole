@@ -1,0 +1,38 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Add postgres key
+  apt_key:
+    url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+    state: present
+
+- name: Add postgres repo
+  apt_repository:
+    state: present
+    repo: "deb https://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg main"
+    filename: postgresql
+
+- name: Install postgres
+  apt:
+    name: postgresql-{{ postgres_version }}
+    state: present
+
+
+- name: Ensure PostgreSQL is running and enabled
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+# Ensure the temporary directory exists
+# create tmp directory for create user in postgre
+- name: Create Ansible remote temporary directory
+  become: yes
+  file:
+    path: "{{ ansible_remote_tmp_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "{{ ansible_remote_tmp_mode }}"

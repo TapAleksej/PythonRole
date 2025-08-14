@@ -1,0 +1,80 @@
+---
+# user for node_exporter
+- name: Create node_exporter user
+  user:
+    name: node_exporter
+    system: yes
+    shell: /sbin/nologin
+
+- name: Force delete specific directory
+  file:
+    path: "{{ ansible_remote_tmp_dir }}"
+    state: absent
+    force: yes
+
+# tasks file for node_exporter
+- name: Create Ansible remote temporary directory
+  become: yes
+  file:
+    path: "{{ ansible_remote_tmp_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "{{ ansible_remote_tmp_mode }}"
+
+- name: get tar source from url
+  get_url:
+    url: "https://github.com/prometheus/node_exporter/releases/download/v1.9.1/node_exporter-1.9.1.linux-amd64.tar.gz"
+    dest: "{{ ansible_remote_tmp_dir }}/node_exporter-1.9.1.linux-amd64.tar.gz"
+
+- name: Extract tar
+  unarchive:
+    src:  "{{ ansible_remote_tmp_dir }}/{{ packet_name }}.tar.gz"
+    dest: "/opt"
+    remote_src: yes
+
+- name: chown directory
+  file:
+    path: /opt/node_exporter
+    owner: node_exporter
+    group: node_exporter
+    state: directory
+
+- name: Force delete specific directory
+  file:
+    path: /opt/node_exporter
+    state: absent
+    force: yes
+
+
+- name: Rename directory
+  become: yes
+  command: mv /opt/{{ packet_name }} /opt/node_exporter
+  tags: rename
+
+# sudo chown -R node_exporter:node_exporter /opt/node_exporter
+- name: perm dir to node_exporter user
+  become: yes
+  file:
+    path: "{{ node_exporter_path }}"
+    recurse: yes
+    state: directory
+    owner: node_exporter
+    group: node_exporter
+    mode: "0755"
+
+# service systemd
+- name: Create  service
+  template:
+    src: node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: true
+
+- name: Start node_exporter
+  systemd:
+    name: node_exporter
+    state: restarted
+    enabled: true

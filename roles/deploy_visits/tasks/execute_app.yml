@@ -1,0 +1,31 @@
+---
+
+
+# Python
+- name: Create venv
+  command: python3 -m venv "{{ prj_dir }}/.venv"
+  args:
+    creates: "{{ prj_dir }}/.venv"
+
+
+- name: Install requiments
+  pip:
+    name: "{{ item }}"
+    virtualenv: "{{ prj_dir }}/.venv"
+    state: present
+  loop:
+    - flask
+    - redis
+    - psycopg2-binary
+    - dotenv
+
+ # change file
+- name: Insert into app.py after import os
+  blockinfile:
+    path: "{{ prj_dir }}/app.py"
+    block: |
+      from dotenv import load_dotenv
+      load_dotenv(dotenv_path='./.env')
+    insertafter: "^import os"
+    create: yes
+

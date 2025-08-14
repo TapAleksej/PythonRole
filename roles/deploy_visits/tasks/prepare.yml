@@ -1,0 +1,22 @@
+---
+- name: install packages
+  package:
+    name:
+      - gnupg2
+      - python3-psycopg2
+      - acl
+    update_cache: yes
+
+- name: Install deps
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - python3-venv
+    - python3-pip
+
+
+
+
+
+
