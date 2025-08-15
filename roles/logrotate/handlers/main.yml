@@ -1,0 +1,9 @@
+---
+# handlers file for roles/logrotate
+- name: check_logrotate
+  command: logrotate -d /etc/logrotate.d/myapp
+
+
+- name: start_logrotate
+  become: true
+  command: logrotate -f /etc/logrotate.conf

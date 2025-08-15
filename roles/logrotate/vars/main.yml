@@ -1,0 +1,4 @@
+---
+# vars file for roles/logrotate
+logrotate_paths: /var/log/myapp/
+rotate_count: 4

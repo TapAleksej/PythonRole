@@ -1,0 +1,30 @@
+---
+# tasks file for roles/logrotate
+- name: Create log dir for app
+  file:
+    path: "{{ logrotate_paths }}"
+    state: directory
+    owner: www-data
+    group: www-data
+
+- name: Create error.log
+  file:
+    path: "{{ logrotate_paths }}/error.log"
+    state: touch
+    owner: www-data
+    group: www-data
+
+- name: Create debug.log
+  file:
+    path: "{{ logrotate_paths }}/debug.log"
+    state: touch
+    owner: www-data
+    group: www-data
+
+- name: Create app config for logrotate
+  template:
+    src: myapp_config.j2
+    dest: /etc/logrotate.d/myapp
+  notify:
+    - check_logrotate
+    - start_logrotate

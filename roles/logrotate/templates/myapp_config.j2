@@ -1,0 +1,12 @@
+/var/log/myapp/*.log {
+        daily
+        rotate {{ rotate_count }}
+        compress
+        delaycompress
+        missingok
+        notifempty
+        create 0640 syslog adm
+        postrotate
+                invoke-rc.d rsyslog rotate > /dev/null
+        endscript
+}
