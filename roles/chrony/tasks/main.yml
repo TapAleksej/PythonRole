@@ -1,0 +1,14 @@
+---
+# tasks file for chrony
+# apt install chrony
+- name: install chrony
+  package:
+      name:
+        - chrony
+      update_cache: yes
+
+- name: Start chrony
+  systemd_service:
+    name: chrony.service
+    state: started
+    enabled: true

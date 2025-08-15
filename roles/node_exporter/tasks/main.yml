@@ -45,7 +45,7 @@
     path: /opt/node_exporter
     state: absent
     force: yes
-
+cd
 
 - name: Rename directory
   become: yes
