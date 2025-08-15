@@ -1,0 +1,14 @@
+---
+# tasks file for roles/env_role
+- name: Create directory app
+  file:
+    path: /opt/app/
+    #mode: "0600"
+    state: directory
+
+
+- name: Create env file
+  template:
+    src: env.j2
+    dest: /opt/app/.env
+    mode: "0600"
