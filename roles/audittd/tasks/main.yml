@@ -1,0 +1,23 @@
+---
+#tasks file for roles/audittd
+- name: install auditd
+  package:
+    name: auditd
+    state: present
+    update_cache: yes
+
+- name: set template auditd.config
+  template:
+    src: auditd.config.j2
+    dest: /etc/audit/auditd.conf
+
+- name: insert template rules in /etc/audit/rules.d/
+  template:
+    src: auditd_rules.j2
+    dest: /etc/audit/rules.d/audit.rules
+
+- name: service auditd must be started
+  service:
+    name: auditd
+    state: started
+    enabled: yes
