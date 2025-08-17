@@ -36,7 +36,7 @@
     src: atop.j2
     dest: /etc/default/atop
   notify:
-    - reload atop
+    - reload systemd
     - restart atop service
   tags: config_atop
 
