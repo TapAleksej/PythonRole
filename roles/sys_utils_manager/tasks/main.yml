@@ -4,22 +4,47 @@
   apt:
     update_cache: yes
 
-
-- name: install atop
+- name: install monitoring utils
   apt:
     name: "{{ item }}"
     state: present
   loop:
     - atop
-    - htop
+    - iotop
+  tags: monitoring
+
+
+- name: install networks utils
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
     - nmap
     - tcpdump
     - mtr
-    - strace
-  tags: inst_all
+  tags: network
 
 
-- name: install atop
+- name: install debug utils
   apt:
-    name: atop
-  tags: atop
+    name: strace
+    state: present
+  tags: debug
+
+- name: set interval metrics from atop
+  template:
+    src: atop.j2
+    dest: /etc/default/atop
+  notify:
+    - reload atop
+    - restart atop service
+  tags: config_atop
+
+
+
+
+
+
+#config_atop - для настройки утилиты atop ->
+#изменение времени сбора метрик с 10 минут на значение,
+#указанное в переменной atop_time

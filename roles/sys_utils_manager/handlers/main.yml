@@ -1,2 +1,11 @@
 ---
 # handlers file for roles/sys_utils_manager
+- name: reload systemd
+  systemd:
+    daemon-reload: yes
+
+
+- name: restart atop service
+  service:
+    name: atop
+    state: restarted
